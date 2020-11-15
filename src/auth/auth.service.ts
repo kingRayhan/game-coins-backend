@@ -12,4 +12,6 @@ export class AuthService {
   registerUser(body) {
     return this.userSercice.createUser(body);
   }
+
+  login() {}
 }
