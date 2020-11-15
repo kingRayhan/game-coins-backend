@@ -5,7 +5,7 @@ import {
   Unique,
   BeforeInsert,
 } from 'typeorm';
-import { hashSync } from 'bcryptjs';
+import { hashSync, compareSync } from 'bcryptjs';
 
 @Entity()
 @Unique(['email'])
@@ -21,7 +21,7 @@ export class User {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column({ default: false })
@@ -31,7 +31,15 @@ export class User {
   // tweets: Tweet[];
 
   @BeforeInsert()
-  makeMyPasswordHashed() {
+  public makeMyPasswordHashed() {
     this.password = hashSync(this.password);
+  }
+
+  /**
+   * verify password
+   * @param password User password
+   */
+  public verifyPassword(password: string) {
+    return compareSync(password, this.password);
   }
 }
