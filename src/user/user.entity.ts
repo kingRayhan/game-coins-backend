@@ -2,33 +2,31 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  Unique,
   BeforeInsert,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { hashSync, compareSync } from 'bcryptjs';
 
-@Entity()
-@Unique(['email'])
+@Entity({ name: 'users' })
 export class User {
-  constructor() {}
-
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column({ select: false })
   password: string;
 
-  @Column({ default: false })
-  isAdmin?: boolean;
+  @CreateDateColumn()
+  createdAt?: string;
 
-  // @OneToMany(() => Tweet, (tweet) => tweet.user)
-  // tweets: Tweet[];
+  @UpdateDateColumn()
+  updatedAt?: number;
 
   @BeforeInsert()
   public makeMyPasswordHashed() {

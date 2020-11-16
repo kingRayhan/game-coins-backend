@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { LoginDTO, RegisterDTO } from './auth.dto';
@@ -10,8 +14,18 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  register(data: RegisterDTO) {
-    return this.userSercice.createUser(data);
+  async register(data: RegisterDTO) {
+    try {
+      const user = await this.userSercice.createUser(data);
+      return {
+        message: 'Registered successfully',
+        user,
+      };
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new ForbiddenException('Email address already taken');
+      }
+    }
   }
 
   async login(data: LoginDTO) {
