@@ -1,71 +1,90 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginationDTO } from 'src/shared/PaginationDTO';
+import slug from 'src/shared/utilities/slug';
 
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 
 @Injectable()
 export class GamesService {
-  constructor(
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async create(createGameDto: CreateGameDto) {
     const game = await this.prisma.game.create({
       data: {
-        title: 'hello',
-        slug: 'hello-slug',
-        body: 'body',
+        ...createGameDto,
+        slug: slug(createGameDto.title) + '-' + Date.now(),
         coins: {
-          create: [
-            {
-              label: 'label 1',
-              price: 100,
-            },
-          ],
+          create: createGameDto.coins,
         },
+      },
+      include: { coins: true },
+    });
+
+    return {
+      message: 'Game created successfully',
+      data: game,
+    };
+  }
+
+  async findAll({ limit = 10, page = 1 }: PaginationDTO) {
+    const data = await this.prisma.game.findMany({
+      take: +limit,
+      skip: +limit * (+page - 1),
+    });
+
+    const count = await this.prisma.game.count();
+
+    return {
+      data,
+      meta: {
+        totalItems: count,
+        itemsPerPage: +limit,
+        totalPages: Math.ceil(count / +limit),
+        currentPage: +page,
+      },
+    };
+  }
+
+  async findOneBySlug(slug: string) {
+    const game = await this.prisma.game.findOne({
+      where: { slug },
+      include: { coins: true },
+    });
+    if (!game) throw new NotFoundException();
+    return game;
+  }
+
+  async findOneByID(id: string) {
+    const game = await this.prisma.game.findOne({
+      where: { id },
+      include: { coins: true },
+    });
+    if (!game) throw new NotFoundException();
+    return game;
+  }
+
+  async update(id: string, updateGameDto: UpdateGameDto) {
+    await this.prisma.game.update({
+      where: { id },
+      data: {
+        ...updateGameDto,
+        coins: {},
       },
     });
 
-    return game;
-    // const c1 = this.coinRepository.create({
-    //   label: '100uc',
-    //   price: 100,
-    // });
-    // const c2 = this.coinRepository.create({
-    //   label: '200uc',
-    //   price: 200,
-    // });
-    // const c3 = this.coinRepository.create({
-    //   label: '300uc',
-    //   price: 300,
-    // });
-    // const game = await this.gameRepository.create({
-    //   ...createGameDto,
-    // });
-    // const coin1 = await this.coinRepository.save(c1);
-    // const coin2 = await this.coinRepository.save(c2);
-    // const coin3 = await this.coinRepository.save(c3);
-    // return this.gameRepository.save(game);
+    return this.findOneByID(id);
   }
 
-  // findAll() {
-  //   return this.gameRepository.find();
-  // }
-
-  findOne(id: number) {
-    return `This action returns a #${id} game`;
+  async remove(id: string) {
+    try {
+      await this.prisma.game.delete({ where: { id } });
+      return {
+        message: 'Deleted successfully',
+      };
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
-
-  update(id: number, updateGameDto: UpdateGameDto) {
-    return `This action updates a #${id} game`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} game`;
-  }
-
-  // async paginate(options: IPaginationOptions): Promise<Pagination<Game>> {
-  //   return paginate<Game>(this.gameRepository, options);
-  // }
 }

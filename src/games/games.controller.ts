@@ -16,6 +16,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiPagination } from 'src/shared/decorators/ApiPagination.decorator';
 import { ConfigService } from '@nestjs/config';
+import { PaginationDTO } from 'src/shared/PaginationDTO';
 
 @ApiTags('Games')
 @Controller('games')
@@ -25,39 +26,35 @@ export class GamesController {
     private config: ConfigService,
   ) {}
 
-  // @ApiBearerAuth()
-  // @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() createGameDto: CreateGameDto) {
     return this.gamesService.create(createGameDto);
   }
 
-  // @Get()
-  // @ApiPagination()
-  // findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
-  //   return this.gamesService.paginate({
-  //     page,
-  //     limit,
-  //     route: this.config.get('APP_URL') + '/games',
-  //   });
-  // }
+  @Get()
+  @ApiPagination()
+  findAll(@Query() pagination: PaginationDTO) {
+    return this.gamesService.findAll(pagination);
+  }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.gamesService.findOne(+id);
+  @Get(':slug')
+  findOne(@Param('slug') slug: string) {
+    return this.gamesService.findOneBySlug(slug);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   update(@Param('id') id: string, @Body() updateGameDto: UpdateGameDto) {
-    return this.gamesService.update(+id, updateGameDto);
+    return this.gamesService.update(id, updateGameDto);
   }
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.gamesService.remove(+id);
+    return this.gamesService.remove(id);
   }
 }
