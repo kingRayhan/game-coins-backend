@@ -1,28 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import {
-  paginate,
-  Pagination,
-  IPaginationOptions,
-} from 'nestjs-typeorm-paginate';
+import { PrismaService } from 'src/prisma/prisma.service';
 
-import { Repository } from 'typeorm';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
-import { Coin } from './entities/coins.entity';
-import { Game } from './entities/games.entity';
 
 @Injectable()
 export class GamesService {
   constructor(
-    @InjectRepository(Game)
-    private gameRepository: Repository<Game>,
-
-    @InjectRepository(Coin)
-    private coinRepository: Repository<Coin>,
+    private prisma: PrismaService,
   ) {}
 
   async create(createGameDto: CreateGameDto) {
+    const game = await this.prisma.game.create({
+      data: {
+        title: 'hello',
+        slug: 'hello-slug',
+        body: 'body',
+        coins: {
+          create: [
+            {
+              label: 'label 1',
+              price: 100,
+            },
+          ],
+        },
+      },
+    });
+
+    return game;
     // const c1 = this.coinRepository.create({
     //   label: '100uc',
     //   price: 100,
@@ -35,16 +40,13 @@ export class GamesService {
     //   label: '300uc',
     //   price: 300,
     // });
-
-    const game = await this.gameRepository.create({
-      ...createGameDto,
-    });
-
+    // const game = await this.gameRepository.create({
+    //   ...createGameDto,
+    // });
     // const coin1 = await this.coinRepository.save(c1);
     // const coin2 = await this.coinRepository.save(c2);
     // const coin3 = await this.coinRepository.save(c3);
-
-    return this.gameRepository.save(game);
+    // return this.gameRepository.save(game);
   }
 
   // findAll() {
@@ -63,7 +65,7 @@ export class GamesService {
     return `This action removes a #${id} game`;
   }
 
-  async paginate(options: IPaginationOptions): Promise<Pagination<Game>> {
-    return paginate<Game>(this.gameRepository, options);
-  }
+  // async paginate(options: IPaginationOptions): Promise<Pagination<Game>> {
+  //   return paginate<Game>(this.gameRepository, options);
+  // }
 }

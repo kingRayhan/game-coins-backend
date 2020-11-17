@@ -1,18 +1,18 @@
-import {
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+// import {
+//   PrimaryGeneratedColumn,
+//   CreateDateColumn,
+//   UpdateDateColumn,
+// } from 'typeorm';
 
-abstract class BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id?: string;
+// abstract class BaseEntity {
+//   @PrimaryGeneratedColumn('uuid')
+//   id?: string;
 
-  @CreateDateColumn()
-  createdAt?: string;
+//   @CreateDateColumn()
+//   createdAt?: string;
 
-  @UpdateDateColumn()
-  updatedAt?: number;
-}
+//   @UpdateDateColumn()
+//   updatedAt?: number;
+// }
 
-export default BaseEntity;
+// export default BaseEntity;
