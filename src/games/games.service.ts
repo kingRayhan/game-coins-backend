@@ -23,47 +23,28 @@ export class GamesService {
   ) {}
 
   async create(createGameDto: CreateGameDto) {
-    const c1 = this.coinRepository.create({
-      label: '100uc',
-      price: 100,
-    });
-    const c2 = this.coinRepository.create({
-      label: '200uc',
-      price: 200,
-    });
-    const c3 = this.coinRepository.create({
-      label: '300uc',
-      price: 300,
-    });
+    // const c1 = this.coinRepository.create({
+    //   label: '100uc',
+    //   price: 100,
+    // });
+    // const c2 = this.coinRepository.create({
+    //   label: '200uc',
+    //   price: 200,
+    // });
+    // const c3 = this.coinRepository.create({
+    //   label: '300uc',
+    //   price: 300,
+    // });
 
-    const game = await this.gameRepository.insert({
+    const game = await this.gameRepository.create({
       ...createGameDto,
-      coins: [
-        {
-          label: 'l1',
-          price: 500,
-        },
-      ],
     });
-
-    // if (createGameDto.coins) {
-    //   createGameDto.coins.forEach(async (coin) => {
-    //     const c = this.coinRepository.create({
-    //       label: coin.label,
-    //       price: coin.price,
-    //     });
-
-    //     const newCoin = await this.coinRepository.save(c);
-    //     game.coins.push(newCoin);
-    //   });
-    // }
 
     // const coin1 = await this.coinRepository.save(c1);
     // const coin2 = await this.coinRepository.save(c2);
     // const coin3 = await this.coinRepository.save(c3);
 
-    return game;
-    // return this.gameRepository.save(game);
+    return this.gameRepository.save(game);
   }
 
   // findAll() {
