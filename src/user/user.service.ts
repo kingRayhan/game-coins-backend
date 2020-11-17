@@ -1,30 +1,27 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { hashSync } from 'bcryptjs';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDTO } from './user.dto';
-import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
-  ) {}
+  constructor(private prisma: PrismaService) {}
+
   async createUser(body: CreateUserDTO) {
-    // TODO: unique error
-    const user = new User();
-    user.name = body.name;
-    user.email = body.email;
-    user.password = body.password;
-    return this.userRepository.save(user);
-  }
-  async getUserByEmail(email: string) {
-    return this.userRepository.findOne({
-      where: { email },
-      select: ['id', 'name', 'email', 'password'],
+    const user = await this.prisma.user.create({
+      data: {
+        ...body,
+        password: hashSync(body.password),
+      },
     });
+
+    return user;
+  }
+
+  async getUserByEmail(email: string) {
+    return this.prisma.user.findOne({ where: { email } });
   }
   async getUserById(userId) {
-    return this.userRepository.findOne({ where: { id: userId } });
+    return this.prisma.user.findOne({ where: { id: userId } });
   }
 }

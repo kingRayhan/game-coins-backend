@@ -25,22 +25,22 @@ export class GamesController {
     private config: ConfigService,
   ) {}
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
+  // @ApiBearerAuth()
+  // @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() createGameDto: CreateGameDto) {
     return this.gamesService.create(createGameDto);
   }
 
-  @Get()
-  @ApiPagination()
-  findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
-    return this.gamesService.paginate({
-      page,
-      limit,
-      route: this.config.get('APP_URL') + '/games',
-    });
-  }
+  // @Get()
+  // @ApiPagination()
+  // findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
+  //   return this.gamesService.paginate({
+  //     page,
+  //     limit,
+  //     route: this.config.get('APP_URL') + '/games',
+  //   });
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
