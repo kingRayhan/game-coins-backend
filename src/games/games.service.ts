@@ -32,6 +32,9 @@ export class GamesService {
     const data = await this.prisma.game.findMany({
       take: +limit,
       skip: +limit * (+page - 1),
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     const count = await this.prisma.game.count();
