@@ -69,11 +69,15 @@ export class GamesService {
   }
 
   async update(id: string, updateGameDto: UpdateGameDto) {
+    await this.prisma.coin.deleteMany({ where: { gameId: id } });
+
     await this.prisma.game.update({
       where: { id },
       data: {
         ...updateGameDto,
-        coins: {},
+        coins: {
+          create: updateGameDto.coins,
+        },
       },
     });
 
@@ -82,6 +86,7 @@ export class GamesService {
 
   async remove(id: string) {
     try {
+      await this.prisma.coin.deleteMany({ where: { gameId: id } });
       await this.prisma.game.delete({ where: { id } });
       return {
         message: 'Deleted successfully',
