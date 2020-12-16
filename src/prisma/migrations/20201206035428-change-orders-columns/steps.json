@@ -1,0 +1,29 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "Order",
+      "field": "customerName",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Order",
+      "field": "customerEmail",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Order",
+      "field": "name"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Order",
+      "field": "email"
+    }
+  ]
+}

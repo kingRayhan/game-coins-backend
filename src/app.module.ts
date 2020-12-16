@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { GamesModule } from './games/games.module';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PrismaModule } from './prisma/prisma.module';
     AuthModule,
     GamesModule,
     PrismaModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

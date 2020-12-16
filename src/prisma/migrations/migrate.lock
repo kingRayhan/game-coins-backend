@@ -3,3 +3,7 @@
 20201117093942-test
 20201117130343-make-slug-unique
 20201118023744-add-created-at-on-game-model
+20201206035142-create-orders
+20201206035428-change-orders-columns
+20201206064013-add-created-at-columns-to-orders
+20201206065744-transaction-id

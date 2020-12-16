@@ -35,4 +35,15 @@ model Coin {
   price  Float
   Game   Game?   @relation(fields: [gameId], references: [id])
   gameId String?
+  Order  Order[]
+}
+
+model Order {
+  id            String   @id @default(uuid())
+  customerName  String
+  customerEmail String
+  transactionId String
+  coin          Coin?    @relation(fields: [coinId], references: [id])
+  coinId        String?
+  createdAt     DateTime @default(now())
 }
