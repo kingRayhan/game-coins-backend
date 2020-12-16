@@ -34,11 +34,10 @@ export class AuthService {
   }
 
   async login(data: LoginDTO) {
-    if (!this.attempt(data))
-      throw new UnauthorizedException('Invalid credential');
+    const authenticated = await this.attempt(data);
+    if (!authenticated) throw new UnauthorizedException('Invalid credential');
 
     const user = await this.userSercice.getUserByEmail(data.email);
-
     const access_token = await this.jwtService.sign({
       userId: user.id,
     });
