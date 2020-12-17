@@ -1,0 +1,47 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "DeleteField",
+      "model": "Coin",
+      "field": "Order"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Order",
+      "field": "game",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Order",
+      "field": "price",
+      "type": "Float",
+      "arity": "Required"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Order",
+      "field": "coinId"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Order",
+      "field": "coin",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "DeleteDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Order",
+          "field": "coin"
+        },
+        "directive": "relation"
+      }
+    }
+  ]
+}

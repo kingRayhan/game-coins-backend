@@ -19,13 +19,14 @@ model User {
 }
 
 model Game {
-  id        String  @id @default(uuid())
+  id        String   @id @default(uuid())
   title     String
-  slug      String? @unique
+  slug      String?  @unique
   thumbnail String?
   cover     String?
   body      String
   coins     Coin[]
+  createdAt DateTime @default(now())
 }
 
 model Coin {
@@ -34,4 +35,16 @@ model Coin {
   price  Float
   Game   Game?   @relation(fields: [gameId], references: [id])
   gameId String?
+}
+
+model Order {
+  id            String   @id @default(uuid())
+  customerName  String
+  customerEmail String
+  transactionId String
+  game          String
+  coin          String
+  price         Float
+  playerId      String
+  createdAt     DateTime @default(now())
 }

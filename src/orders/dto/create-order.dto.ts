@@ -13,7 +13,19 @@ export class CreateOrderDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  public coinId: string;
+  public coin: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  public game: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  public price: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  public playerId: string;
 
   @ApiProperty()
   @IsNotEmpty()

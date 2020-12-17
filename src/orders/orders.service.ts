@@ -9,18 +9,7 @@ export class OrdersService {
   constructor(private prisma: PrismaService) {}
 
   async create(createOrderDto: CreateOrderDto) {
-    const coinId = createOrderDto.coinId;
-    delete createOrderDto.coinId;
-    const data = await this.prisma.order.create({
-      data: {
-        ...createOrderDto,
-        coin: {
-          connect: {
-            id: coinId,
-          },
-        },
-      },
-    });
+    const data = await this.prisma.order.create({ data: createOrderDto });
 
     return {
       message: 'Order created successfully',
@@ -34,9 +23,6 @@ export class OrdersService {
       skip: +limit * (+page - 1),
       orderBy: {
         createdAt: 'desc',
-      },
-      include: {
-        coin: true,
       },
     });
 
