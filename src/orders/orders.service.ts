@@ -39,15 +39,22 @@ export class OrdersService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  findOne(id: string) {
+    return this.prisma.order.findUnique({ where: { id } });
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
+  update(id: string, updateOrderDto: UpdateOrderDto) {
+    return this.prisma.order.update({ where: { id }, data: updateOrderDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+  async remove(id: string) {
+    try {
+      await this.prisma.order.delete({ where: { id } });
+      return {
+        message: 'deleted succesfully',
+      };
+    } catch (error) {
+      console.log(JSON.stringify(error, undefined, 4));
+    }
   }
 }

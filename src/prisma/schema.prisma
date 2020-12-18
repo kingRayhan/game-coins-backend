@@ -38,7 +38,7 @@ model Coin {
 }
 
 model Order {
-  id            String   @id @default(uuid())
+  id            String      @id @default(uuid())
   customerName  String
   customerEmail String
   transactionId String
@@ -46,5 +46,11 @@ model Order {
   coin          String
   price         Float
   playerId      String
-  createdAt     DateTime @default(now())
+  status        OrderStatus @default(PENDING)
+  createdAt     DateTime    @default(now())
+}
+
+enum OrderStatus {
+  PENDING
+  DONE
 }
