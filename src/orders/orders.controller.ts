@@ -31,8 +31,11 @@ export class OrdersController {
   @ApiPagination()
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
-  findAll(@Query() pagination: PaginationDTO) {
-    return this.ordersService.findAll(pagination);
+  findAll(
+    @Query() pagination: PaginationDTO,
+    @Query('status') status: any = 'PENDING',
+  ) {
+    return this.ordersService.findAll(pagination, status);
   }
 
   @Get(':id')
@@ -53,5 +56,12 @@ export class OrdersController {
   @UseGuards(AuthGuard('jwt'))
   remove(@Param('id') id: string) {
     return this.ordersService.remove(id);
+  }
+
+  @Post('send-pass/:orderId/:token')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  token(@Param('orderId') orderId: string, @Param('token') token: string) {
+    return this.ordersService.sendPass(orderId, token);
   }
 }

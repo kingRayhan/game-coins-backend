@@ -10,6 +10,8 @@ import { GamesModule } from './games/games.module';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { OrdersModule } from './orders/orders.module';
+import { MailerModule } from './mailer/mailer.module';
+import { CounterModule } from './counter/counter.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { OrdersModule } from './orders/orders.module';
     GamesModule,
     PrismaModule,
     OrdersModule,
+    MailerModule,
+    CounterModule,
   ],
   controllers: [AppController],
   providers: [AppService],
