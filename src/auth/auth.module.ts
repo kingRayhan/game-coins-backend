@@ -2,14 +2,17 @@ import { Module } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UserModule } from 'src/user/user.module';
+
 import { JwtModule } from '@nestjs/jwt';
 import { JWTStrategy } from './passport/jwt.strategy';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  providers: [AuthService, JWTStrategy, PrismaModule],
+  providers: [AuthService, JWTStrategy],
   controllers: [AuthController],
-  imports: [UserModule, JwtModule.register({ secret: 'hard!to-guess_secret' })],
+  imports: [
+    UsersModule,
+    JwtModule.register({ secret: 'hard!to-guess_secret-ddd784774587' }),
+  ],
 })
 export class AuthModule {}

@@ -11,11 +11,12 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String    @id @default(uuid())
+  email     String    @unique
   name      String
   password  String
-  createdAt DateTime @default(now())
+  role      UserRole? @default(MODERATOR)
+  createdAt DateTime  @default(now())
 }
 
 model Game {
@@ -53,4 +54,9 @@ model Order {
 enum OrderStatus {
   PENDING
   DONE
+}
+
+enum UserRole {
+  ADMIN
+  MODERATOR
 }
