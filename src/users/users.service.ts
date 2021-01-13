@@ -65,9 +65,9 @@ export class UsersService {
   findOne(id: string) {
     return this.prisma.user.findUnique({ where: { id } });
   }
+  //
 
   update(id: string, data: UpdateUserDto) {
-    
     if (data.password) {
       data.password = hashSync(data.password);
     }
